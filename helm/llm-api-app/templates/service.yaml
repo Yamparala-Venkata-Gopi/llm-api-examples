@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "llm-api-app.fullname" . }}
+  labels:
+    {{- include "llm-api-app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    {{- include "llm-api-app.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      protocol: TCP
+      {{- if eq .Values.app "java" }}
+      port: {{ .Values.java.port }}
+      targetPort: {{ .Values.java.port }}
+      {{- else }}
+      port: {{ .Values.python.port }}
+      targetPort: {{ .Values.python.port }}
+      {{- end }}

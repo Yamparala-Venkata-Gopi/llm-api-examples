@@ -1,0 +1,34 @@
+# -------------------------------------------------------
+# App selection: set to "python" or "java"
+# -------------------------------------------------------
+app: python
+
+replicaCount: 1
+
+# Python app configuration
+python:
+  image:
+    repository: llm-api-python
+    tag: latest
+    pullPolicy: IfNotPresent
+  port: 5000
+
+# Java app configuration
+java:
+  image:
+    repository: llm-api-java
+    tag: latest
+    pullPolicy: IfNotPresent
+  port: 8080
+
+service:
+  type: ClusterIP
+
+# LLM provider API keys (leave empty to inject via external secrets)
+apiKeys:
+  openai: ""
+  anthropic: ""
+  cohere: ""
+  mistral: ""
+  google: ""
+  groq: ""
