@@ -3,6 +3,10 @@
 # -------------------------------------------------------
 app: python
 
+# Unique Kubernetes names when running multiple releases in one namespace
+# (e.g. python + java). Example: fullnameOverride: llm-api-python
+fullnameOverride: ""
+
 replicaCount: 1
 
 # Python app configuration

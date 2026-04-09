@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         {{- include "llm-api-app.selectorLabels" . | nindent 8 }}
+        {{- include "llm-api-app.podExtraLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
