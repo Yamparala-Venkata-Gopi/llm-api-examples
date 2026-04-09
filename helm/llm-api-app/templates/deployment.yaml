@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "llm-api-app.fullname" . }}
+  labels:
+    {{- include "llm-api-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "llm-api-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "llm-api-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- if eq .Values.app "java" }}
+          image: "{{ .Values.java.image.repository }}:{{ .Values.java.image.tag }}"
+          imagePullPolicy: {{ .Values.java.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.java.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.java.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.java.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          {{- else }}
+          image: "{{ .Values.python.image.repository }}:{{ .Values.python.image.tag }}"
+          imagePullPolicy: {{ .Values.python.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.python.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.python.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.python.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "llm-api-app.fullname" . }}-api-keys
