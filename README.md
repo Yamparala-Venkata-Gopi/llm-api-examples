@@ -10,6 +10,8 @@ This repository contains a list of working code examples for calling various LLM
 
 See also: [List of cloud hosts for inference and fine-tuning](https://github.com/jamesmurdza/awesome-inference-hosts)
 
+[README-k8s.md](README-k8s.md) contains step-by-step instructions for deploying the application on Kubernetes clusters using the included Helm chart and the Docker Hub CI/CD workflow.
+
 ## Table of Contents
 
 - [OpenAI](#openai)
